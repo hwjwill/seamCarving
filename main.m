@@ -1,8 +1,8 @@
 function [] = main(imname, targetWidth)
 imrgb = imread(imname);
 im = rgb2gray(im2single(imrgb));
-[mag, ~] = imgradient(im);
-[mag, ~] = imgradient(mag);
+mag = mySobel(im);
+%[mag, ~] = imgradient(im);
 vmag = mag;
 w2cut = size(vmag, 2) - targetWidth;
 %hmag = mag;
@@ -47,6 +47,14 @@ else
 end
 [rVal, i] = min(candidates);
 ry = yCoords(i);
+end
+
+function [mag] = mySobel(img)
+xMask = [-1, 0, 1; -2, 0, 2; -1, 0, 1];
+yMask = [-1, -2, -1; 0, 0, 0; -1, -2, -1];
+gx = conv2(img, xMask, 'same');
+gy = conv2(img, yMask, 'same');
+mag = (gx .^ 2 + gy .^2) .^ 0.5;
 end
 
 % function [result] = cutVertical()
